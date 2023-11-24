@@ -1,0 +1,31 @@
+.table {
+  font-size: smaller;
+}
+
+.orders {
+  margin-top: 5px;
+}
+
+.untaken {
+  background: rgba(156, 202, 202, 0.829) !important;
+}
+
+.processing {
+  background: rgba(180, 238, 22, 0.658) !important;
+}
+
+.done {
+  background: rgba(57, 218, 70, 0.747) !important;
+}
+
+.refund {
+  background: rgba(137, 43, 226, 0.658) !important;
+}
+
+.canceled {
+  background: rgba(197, 121, 22, 0.781) !important;
+}
+
+.delivered {
+  background: rgba(57, 218, 70, 0.747) !important;
+}
