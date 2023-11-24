@@ -19,11 +19,32 @@ function App() {
   const url = new URL(document.location.href);
   const user: string = (url.searchParams.get('u') as string | undefined) || '';
   const now = new Date();
+  let refreshStarted = false;
 
   const [chosenManager, setChosenManager] = useState<string | undefined>(
     undefined
   );
 
+  const refreshData = async () => {
+    switchLoading(true);
+    const orders = await getOrders(requestData);
+    switchLoading(false);
+    if (typeof orders === 'string') {
+      alert(orders);
+      return;
+    }
+
+    const managers: Set<string> = new Set();
+    orders.map(order => managers.add(order.managerName));
+    setManagers(managers);
+
+    const preparedOrders = convertOrders(orders);
+    setOrders(preparedOrders);
+    setDisplayOrders(cloneDeep(preparedOrders));
+    setChosenManager(undefined);
+  };
+
+  const [autoUpdate, setAutoUpdate] = useState<boolean>(true);
   const [managers, setManagers] = useState<Set<string>>(new Set());
   const [loading, switchLoading] = useState<boolean>(false);
   const [loadedOrders, setOrders] =
@@ -72,23 +93,17 @@ function App() {
           copy.params.year = year;
           setRequestData(copy);
         }}
-        refreshHandler={async e => {
-          switchLoading(true);
-          const orders = await getOrders(requestData);
-          switchLoading(false);
-          if (typeof orders === 'string') {
-            alert(orders);
-            return;
+        refreshHandler={async () => {
+          await refreshData();
+
+          if (!refreshStarted) {
+            refreshStarted = true;
+            setInterval(async () => {
+              if (autoUpdate) {
+                await refreshData();
+              }
+            }, 7000);
           }
-
-          const managers: Set<string> = new Set();
-          orders.map(order => managers.add(order.managerName));
-          setManagers(managers);
-
-          const preparedOrders = convertOrders(orders);
-          setOrders(preparedOrders);
-          setDisplayOrders(cloneDeep(preparedOrders));
-          setChosenManager(undefined);
         }}
         managersFilter={e => {
           if (!loadedOrders) return;
@@ -144,6 +159,7 @@ function App() {
         loading={loading}
         managers={managers}
         chosenManager={chosenManager}
+        switchUpdate={e => setAutoUpdate(e.target.checked)}
       ></Menu>{' '}
       <hr />
       <div className="row">

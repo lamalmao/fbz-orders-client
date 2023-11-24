@@ -13,6 +13,7 @@ function Menu(props: {
   dropOrderFilter: (e: MouseEvent<HTMLButtonElement>) => any;
   findByClientID: (e: MouseEvent<HTMLButtonElement>) => any;
   dropClientIdFilter: (e: MouseEvent<HTMLButtonElement>) => any;
+  switchUpdate: (e: ChangeEvent<HTMLInputElement>) => any;
   loading: boolean;
   managers?: Set<String>;
   chosenManager?: string;
@@ -28,6 +29,7 @@ function Menu(props: {
     dropOrderFilter,
     findByClientID,
     dropClientIdFilter,
+    switchUpdate,
     loading,
     managers,
     chosenManager
@@ -66,6 +68,18 @@ function Menu(props: {
             disabled={loading}
             className="btn btn-primary"
           />
+          <div className="form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="autoUpdateCheckbox"
+              defaultChecked={true}
+              onChange={switchUpdate}
+            />
+            <label className="form-check-label" htmlFor="flexCheckDefault">
+              Автоматически обновлять таблицу
+            </label>
+          </div>
 
           {loading ? (
             <img src="loading.gif" className="loading" alt="loading..." />
