@@ -69,7 +69,7 @@ function Orders(props: {
             <th scope="col">Статус</th>
             <th scope="col">Дата и время</th>
             <th scope="col">Платформа</th>
-            <th scope="col">Ключ</th>
+            <th scope="col">Ключ/Карта</th>
             <th scope="col">Возврат</th>
             <th scope="col">Данные для возврата</th>
           </tr>
