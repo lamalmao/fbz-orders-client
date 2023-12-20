@@ -15,6 +15,14 @@ export interface IOrdersRequestData {
   };
 }
 
+const statuses = new Map([
+  ['Ожидает', 'untaken'],
+  ['В работе', 'processing'],
+  ['Отменён', 'canceled'],
+  ['Возврат', 'refund'],
+  ['Выполнен', 'done']
+]);
+
 function App() {
   const url = new URL(document.location.href);
   const user: string = (url.searchParams.get('u') as string | undefined) || '';
@@ -22,6 +30,10 @@ function App() {
   let refreshStarted = false;
 
   const [chosenManager, setChosenManager] = useState<string | undefined>(
+    undefined
+  );
+
+  const [chosenStatus, setChosenStatus] = useState<string | undefined>(
     undefined
   );
 
@@ -82,6 +94,28 @@ function App() {
 
           copy.params.month = month;
           setRequestData(copy);
+        }}
+        statusFilter={e => {
+          if (!loadedOrders) return;
+
+          const status = statuses.get(e.currentTarget.innerText);
+          if (!status) {
+            return;
+          }
+
+          const newDisplay = loadedOrders.filter(
+            order => order.status === status
+          );
+
+          if (newDisplay) {
+            setDisplayOrders(newDisplay);
+            setChosenStatus(e.currentTarget.innerText);
+          }
+        }}
+        chosenStatus={chosenStatus}
+        dropStatusFilter={() => {
+          setDisplayOrders(cloneDeep(loadedOrders));
+          setChosenStatus(undefined);
         }}
         yearHandler={e => {
           const copy = Object.assign({}, requestData);

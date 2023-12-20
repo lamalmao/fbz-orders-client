@@ -5,7 +5,7 @@ async function getOrders(
   params: IOrdersRequestData
 ): Promise<[IOrder] | string> {
   try {
-    const response = await fetch('http://localhost:5000/orders/get', {
+    const response = await fetch('http://94.241.175.97:5000/orders/get', {
       headers: {
         'Content-Type': 'application/json'
       },

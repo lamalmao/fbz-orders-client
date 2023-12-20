@@ -8,7 +8,9 @@ function Menu(props: {
   limitHandler: (e: ChangeEvent<HTMLInputElement>) => any;
   refreshHandler: (e: MouseEvent<HTMLInputElement>) => any;
   managersFilter: (e: MouseEvent<HTMLButtonElement>) => any;
+  statusFilter: (e: MouseEvent<HTMLButtonElement>) => any;
   dropManagersFilter: (e: MouseEvent<HTMLButtonElement>) => any;
+  dropStatusFilter: (e: MouseEvent<HTMLButtonElement>) => any;
   findOrder: (e: MouseEvent<HTMLButtonElement>) => any;
   dropOrderFilter: (e: MouseEvent<HTMLButtonElement>) => any;
   findByClientID: (e: MouseEvent<HTMLButtonElement>) => any;
@@ -17,6 +19,7 @@ function Menu(props: {
   loading: boolean;
   managers?: Set<String>;
   chosenManager?: string;
+  chosenStatus?: string;
 }) {
   const {
     yearHandler,
@@ -24,15 +27,18 @@ function Menu(props: {
     limitHandler,
     refreshHandler,
     managersFilter,
+    statusFilter,
     dropManagersFilter,
     findOrder,
     dropOrderFilter,
     findByClientID,
     dropClientIdFilter,
+    dropStatusFilter,
     switchUpdate,
     loading,
     managers,
-    chosenManager
+    chosenManager,
+    chosenStatus
   } = props;
   const now = new Date();
 
@@ -171,6 +177,42 @@ function Menu(props: {
                 className="btn btn-danger btn-secondary"
                 type="button"
                 onClick={dropClientIdFilter}
+              >
+                &#10006;
+              </button>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="status" className="sr-only">
+              Поиск по {chosenStatus || 'статусу заказа'}
+            </label>
+            <div className="dropdown">
+              <button
+                type="button"
+                className="btn btn-secondary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                список
+              </button>
+              <div className="dropdown-menu">
+                {['Ожидает', 'Выполнен', 'Отменён', 'Возврат', 'В работе'].map(
+                  (status, index) => (
+                    <button
+                      type="button"
+                      className="dropdown-item"
+                      key={index}
+                      onClick={statusFilter}
+                    >
+                      {status}
+                    </button>
+                  )
+                )}
+              </div>
+              <button
+                className="btn btn-danger reset-managers"
+                type="button"
+                onClick={dropStatusFilter}
               >
                 &#10006;
               </button>
